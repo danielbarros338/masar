@@ -49,7 +49,8 @@ src/modules/$input/
 - **Mapper**: métodos estáticos `toDomain()` e `toPersistence()`
 - **Controller**: delega para o use case, sem lógica de negócio; use decorators NestJS (`@Controller`, `@Post`, `@Body`, `@HttpCode`)
 - **Código limpo**: siga os princípios da skill [new-feature](../skills/new-feature/SKILL.md) — nomes claros, early return, async/await, sem `any`
-- **Module**: crie o arquivo `$input.module.ts` **dentro da pasta `src/modules/$input/`**, declarando controllers, providers e imports do módulo; após criá-lo, registre-o no array `imports` de `src/app.module.ts`
+- **ORM entity**: sempre integre com TypeORM desde a criação — nunca deixe comentário `// TODO`. Use os decorators `@Entity`, `@PrimaryColumn`, `@Column`, `@CreateDateColumn`, `@UpdateDateColumn`, `@DeleteDateColumn` conforme o tipo de cada campo. Todas as propriedades devem usar definite assignment assertion (`!`), ex: `id!: string`
+- **Module**: crie o arquivo `$input.module.ts` **dentro da pasta `src/modules/$input/`**, declarando controllers, providers e imports do módulo; registre `TypeOrmModule.forFeature([${Input}OrmEntity])` nos imports; após criá-lo, registre-o no array `imports` de `src/app.module.ts`
 
 ## Conteúdo mínimo de cada arquivo
 
@@ -69,10 +70,10 @@ Recebe `Create${Input}Dto`, cria a entidade, persiste via repositório, retorna 
 Converte entre `${Input}Entity` ↔ `${Input}OrmEntity`.
 
 ### `$input.orm-entity.ts`
-Classe com os mesmos campos de `${Input}Props`, pronta para ser anotada com o ORM do projeto (deixe um comentário `// TODO: adicionar decorators do ORM` se o ORM ainda não estiver definido).
+Classe com os mesmos campos de `${Input}Props` anotada com decorators TypeORM. Use `@Entity('<nome-tabela-plural>')`, `@PrimaryColumn` para `id`, `@Column` para campos simples, `@CreateDateColumn`/`@UpdateDateColumn`/`@DeleteDateColumn` para datas de controle. Todas as propriedades devem ter `!` (definite assignment assertion): `id!: string`, `name!: string`, etc.
 
 ### `$input.repository.ts`
-Implementa `I${Input}Repository`. Deixe os métodos com `throw new Error('Not implemented')` se o ORM ainda não estiver configurado.
+Implementa `I${Input}Repository` usando `InjectRepository(${Input}OrmEntity)` e `Repository<${Input}OrmEntity>` do TypeORM.
 
 ### `$input.controller.ts`
 Endpoint `POST /$input` que chama `Create${Input}UseCase.execute()`. Fica em `src/modules/$input/api/controllers/`.

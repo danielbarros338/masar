@@ -1,0 +1,24 @@
+export type GptModelProps = {
+  id: string;
+  provider: string;
+  modelId: string;
+  displayName: string;
+  isActive: boolean;
+  isDefault: boolean;
+  isDeprecated: boolean;
+  supportsChats: boolean;
+  supportsStreaming: boolean;
+  supportsReasoning: boolean;
+  supportsTools: boolean;
+  contextWindow: number;
+  maxOutputTokens: number;
+  inputCost: number;
+  outputCost: number;
+  speedScore: number;
+  qualityScore: number;
+  priority: number;
+  metadata: Record<string, unknown> | null;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+};

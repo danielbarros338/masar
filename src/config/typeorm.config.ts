@@ -1,12 +1,20 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { config } from 'dotenv';
 import { RefreshTokenOrmEntity } from '../modules/auth/infra/orm-entities/refresh-token.orm-entity';
+import { BotOrmEntity } from '../modules/bot/infra/orm-entities/bot.orm-entity';
+import { GptModelOrmEntity } from '../modules/gpt/infra/orm-entities/gpt-model.orm-entity';
 import { UserPasswordOrmEntity } from '../modules/user/infra/orm-entities/user-password.orm-entity';
 import { UserOrmEntity } from '../modules/user/infra/orm-entities/user.orm-entity';
 
 config();
 
-const entities = [UserOrmEntity, UserPasswordOrmEntity, RefreshTokenOrmEntity];
+const entities = [
+  UserOrmEntity,
+  UserPasswordOrmEntity,
+  RefreshTokenOrmEntity,
+  GptModelOrmEntity,
+  BotOrmEntity,
+];
 const migrations = [];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {

@@ -5,7 +5,9 @@ import { CommonModule } from './common/common.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { typeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './modules/auth/auth.module';
+import { BotModule } from './modules/bot/bot.module';
 import { EmailModule } from './modules/email/email.module';
+import { GptModule } from './modules/gpt/gpt.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -15,6 +17,8 @@ import { UserModule } from './modules/user/user.module';
     UserModule,
     AuthModule,
     EmailModule,
+    BotModule,
+    GptModule,
   ],
   controllers: [],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
