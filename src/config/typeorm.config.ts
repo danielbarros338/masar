@@ -1,10 +1,10 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { config } from 'dotenv';
+import { GptModelOrmEntity } from '../modules/agent/infra/orm-entities/gpt-model.orm-entity';
 import { RefreshTokenOrmEntity } from '../modules/auth/infra/orm-entities/refresh-token.orm-entity';
 import { BotOrmEntity } from '../modules/bot/infra/orm-entities/bot.orm-entity';
 import { ChatOrmEntity } from '../modules/chat/infra/orm-entities/chat.orm-entity';
 import { MessageOrmEntity } from '../modules/chat/infra/orm-entities/message.orm-entity';
-import { GptModelOrmEntity } from '../modules/gpt/infra/orm-entities/gpt-model.orm-entity';
 import { UserPasswordOrmEntity } from '../modules/user/infra/orm-entities/user-password.orm-entity';
 import { UserOrmEntity } from '../modules/user/infra/orm-entities/user.orm-entity';
 

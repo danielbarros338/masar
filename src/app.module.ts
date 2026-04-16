@@ -5,11 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from './common/common.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { typeOrmConfig } from './config/typeorm.config';
+import { AgentModule } from './modules/agent/agent.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BotModule } from './modules/bot/bot.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { EmailModule } from './modules/email/email.module';
-import { GptModule } from './modules/gpt/gpt.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -21,7 +21,7 @@ import { UserModule } from './modules/user/user.module';
     AuthModule,
     EmailModule,
     BotModule,
-    GptModule,
+    AgentModule,
     ChatModule,
   ],
   controllers: [],

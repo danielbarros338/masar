@@ -1,4 +1,4 @@
-export class ChatGptResponseDto {
+export class ChatAgentResponseDto {
   response!: string;
   modelId!: string;
 }

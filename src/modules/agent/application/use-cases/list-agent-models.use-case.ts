@@ -3,7 +3,7 @@ import { GptModelResponseDto } from '../dto/gpt-model-response.dto';
 import { IGptModelRepository } from '../ports/i-gpt-model.repository';
 
 @Injectable()
-export class ListGptModelsUseCase {
+export class ListAgentModelsUseCase {
   constructor(private readonly gptModelRepository: IGptModelRepository) {}
 
   async execute(): Promise<GptModelResponseDto[]> {

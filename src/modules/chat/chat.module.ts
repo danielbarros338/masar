@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from '../../common/common.module';
+import { AgentModule } from '../agent/agent.module';
 import { BotModule } from '../bot/bot.module';
-import { GptModule } from '../gpt/gpt.module';
 import { ChatController } from './api/controllers/chat.controller';
 import { IChatRepository } from './application/ports/i-chat.repository';
 import { IMessagePublisher } from './application/ports/i-message-publisher';
@@ -23,7 +23,7 @@ import { MessageRepository } from './infra/repositories/message.repository';
     TypeOrmModule.forFeature([ChatOrmEntity, MessageOrmEntity]),
     CommonModule,
     BotModule,
-    GptModule,
+    AgentModule,
   ],
   controllers: [ChatController],
   providers: [

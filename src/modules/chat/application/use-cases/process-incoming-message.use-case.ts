@@ -1,9 +1,9 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { ITransactionManager } from '../../../../common/ports/i-transaction-manager';
+import { IAiProvider } from '../../../agent/application/ports/i-ai-provider';
+import { IGptModelRepository } from '../../../agent/application/ports/i-gpt-model.repository';
 import { IBotRepository } from '../../../bot/application/ports/i-bot.repository';
-import { IAiProvider } from '../../../gpt/application/ports/i-ai-provider';
-import { IGptModelRepository } from '../../../gpt/application/ports/i-gpt-model.repository';
 import { ChatEntity } from '../../domain/entities/chat.entity';
 import { MessageEntity } from '../../domain/entities/message.entity';
 import {

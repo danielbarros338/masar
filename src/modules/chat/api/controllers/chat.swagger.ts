@@ -12,8 +12,13 @@ export const ApiCreateChat = () =>
 
 export const ApiReceiveMessage = () =>
   applyDecorators(
-    ApiOperation({ summary: 'Processa uma mensagem de entrada e retorna a resposta do bot' }),
+    ApiOperation({
+      summary: 'Processa uma mensagem de entrada e retorna a resposta do bot',
+    }),
     ApiResponse({ status: 200, type: MessageResponseDto }),
     ApiResponse({ status: 400, description: 'Dados inválidos' }),
-    ApiResponse({ status: 404, description: 'Bot ou modelo GPT não encontrado' }),
+    ApiResponse({
+      status: 404,
+      description: 'Bot ou modelo GPT não encontrado',
+    }),
   );

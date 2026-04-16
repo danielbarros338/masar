@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ChatGptResponseDto } from '../dto/chat-gpt-response.dto';
-import { ChatGptDto } from '../dto/chat-gpt.dto';
+import { ChatAgentResponseDto } from '../dto/chat-agent-response.dto';
+import { ChatAgentDto } from '../dto/chat-agent.dto';
 import { IAiProvider } from '../ports/i-ai-provider';
 import { IGptModelRepository } from '../ports/i-gpt-model.repository';
 
 @Injectable()
-export class ChatGptUseCase {
+export class ChatAgentUseCase {
   constructor(
     private readonly aiProvider: IAiProvider,
     private readonly gptModelRepository: IGptModelRepository,
   ) {}
 
-  async execute(dto: ChatGptDto): Promise<ChatGptResponseDto> {
+  async execute(dto: ChatAgentDto): Promise<ChatAgentResponseDto> {
     const model = dto.modelId
       ? await this.gptModelRepository.findByModelId(dto.modelId)
       : await this.gptModelRepository.findDefault();
