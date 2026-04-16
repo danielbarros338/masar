@@ -1,10 +1,10 @@
 import {
-    Body,
-    Controller,
-    HttpCode,
-    HttpStatus,
-    Patch,
-    Post,
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Patch,
+  Post,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import type { JwtUser } from '../../../../common/decorators/current-user.decorator';

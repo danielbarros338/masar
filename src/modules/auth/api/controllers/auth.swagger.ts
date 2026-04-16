@@ -13,7 +13,8 @@ export const ApiLogin = () =>
     }),
     ApiResponse({
       status: 200,
-      description: 'E-mail pendente de verificação (token expirado ou não verificado)',
+      description:
+        'E-mail pendente de verificação (token expirado ou não verificado)',
       type: EmailVerificationMessageDto,
     }),
     ApiResponse({ status: 400, description: 'Dados inválidos' }),
@@ -22,7 +23,9 @@ export const ApiLogin = () =>
 
 export const ApiRegister = () =>
   applyDecorators(
-    ApiOperation({ summary: 'Cadastra um novo usuário e envia e-mail de confirmação' }),
+    ApiOperation({
+      summary: 'Cadastra um novo usuário e envia e-mail de confirmação',
+    }),
     ApiResponse({ status: 201, type: EmailVerificationMessageDto }),
     ApiResponse({ status: 400, description: 'Dados inválidos' }),
     ApiResponse({ status: 409, description: 'E-mail já cadastrado' }),
@@ -44,7 +47,8 @@ export const ApiRefreshToken = () =>
 export const ApiConfirmEmail = () =>
   applyDecorators(
     ApiOperation({
-      summary: 'Confirma o e-mail do usuário com o token de 4 dígitos e retorna tokens JWT',
+      summary:
+        'Confirma o e-mail do usuário com o token de 4 dígitos e retorna tokens JWT',
     }),
     ApiResponse({ status: 200, type: AuthResponseDto }),
     ApiResponse({ status: 400, description: 'Dados inválidos' }),

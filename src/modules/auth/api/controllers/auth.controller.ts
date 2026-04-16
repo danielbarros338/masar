@@ -12,10 +12,10 @@ import { LoginUseCase } from '../../application/use-cases/login.use-case';
 import { RefreshTokenUseCase } from '../../application/use-cases/refresh-token.use-case';
 import { RegisterUseCase } from '../../application/use-cases/register.use-case';
 import {
-    ApiConfirmEmail,
-    ApiLogin,
-    ApiRefreshToken,
-    ApiRegister,
+  ApiConfirmEmail,
+  ApiLogin,
+  ApiRefreshToken,
+  ApiRegister,
 } from './auth.swagger';
 
 @ApiTags('auth')

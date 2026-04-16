@@ -1,10 +1,10 @@
 import {
-    Column,
-    CreateDateColumn,
-    DeleteDateColumn,
-    Entity,
-    PrimaryColumn,
-    UpdateDateColumn,
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { UserType } from '../../domain/message.types';
 
@@ -19,7 +19,11 @@ export class MessageOrmEntity {
   @Column({ type: 'text' })
   message!: string;
 
-  @Column({ type: 'enum', enum: ['BOT', 'USER', 'OPERATOR'], name: 'user_type' })
+  @Column({
+    type: 'enum',
+    enum: ['BOT', 'USER', 'OPERATOR'],
+    name: 'user_type',
+  })
   userType!: UserType;
 
   @CreateDateColumn({ name: 'created_at' })

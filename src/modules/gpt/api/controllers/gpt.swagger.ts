@@ -4,7 +4,9 @@ import { SyncAiModelsResponseDto } from '../../application/dto/sync-ai-models-re
 
 export const ApiSyncAiModels = () =>
   applyDecorators(
-    ApiOperation({ summary: 'Sincroniza modelos disponíveis do provider de IA' }),
+    ApiOperation({
+      summary: 'Sincroniza modelos disponíveis do provider de IA',
+    }),
     ApiResponse({ status: 201, type: SyncAiModelsResponseDto }),
     ApiResponse({ status: 401, description: 'Não autenticado' }),
   );

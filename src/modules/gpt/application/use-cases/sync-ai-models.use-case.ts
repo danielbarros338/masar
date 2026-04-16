@@ -15,7 +15,9 @@ export class SyncAiModelsUseCase {
   ) {}
 
   async execute(): Promise<SyncAiModelsResponseDto> {
-    this.logger.log(`Sincronizando modelos do provider: ${this.aiProvider.providerName}`);
+    this.logger.log(
+      `Sincronizando modelos do provider: ${this.aiProvider.providerName}`,
+    );
 
     const [availableIds, existingIds] = await Promise.all([
       this.aiProvider.listModels(),
@@ -61,7 +63,9 @@ export class SyncAiModelsUseCase {
 
     await this.gptModelRepository.saveMany(entities);
 
-    this.logger.log(`${newModelIds.length} modelo(s) adicionado(s): ${newModelIds.join(', ')}`);
+    this.logger.log(
+      `${newModelIds.length} modelo(s) adicionado(s): ${newModelIds.join(', ')}`,
+    );
 
     return { addedModels: newModelIds };
   }

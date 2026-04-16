@@ -7,6 +7,7 @@ export class ChatMapper {
       id: orm.id,
       botId: orm.botId,
       phoneNumber: orm.phoneNumber,
+      chatStatus: orm.chatStatus,
       createdAt: orm.createdAt,
       updatedAt: orm.updatedAt,
       deletedAt: orm.deletedAt,
@@ -18,6 +19,7 @@ export class ChatMapper {
     orm.id = entity.id;
     orm.botId = entity.botId;
     orm.phoneNumber = entity.phoneNumber ?? null;
+    orm.chatStatus = entity.chatStatus;
     orm.createdAt = entity.createdAt;
     orm.updatedAt = entity.updatedAt;
     orm.deletedAt = entity.deletedAt ?? null;

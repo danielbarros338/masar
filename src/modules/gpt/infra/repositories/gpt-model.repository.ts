@@ -31,7 +31,10 @@ export class GptModelRepository extends IGptModelRepository {
   }
 
   async findAllModelIds(): Promise<string[]> {
-    const models = await this.repo.find({ select: { modelId: true }, withDeleted: true });
+    const models = await this.repo.find({
+      select: { modelId: true },
+      withDeleted: true,
+    });
     return models.map((m) => m.modelId);
   }
 
@@ -41,7 +44,7 @@ export class GptModelRepository extends IGptModelRepository {
   }
 
   async saveMany(entities: GptModelEntity[]): Promise<void> {
-    const orms = entities.map(GptModelMapper.toPersistence);
+    const orms = entities.map((e) => GptModelMapper.toPersistence(e));
     await this.repo.save(orms);
   }
 }

@@ -1,3 +1,4 @@
+import { ChatStatus } from '../message.types';
 import { ChatProps } from '../props/chat.props';
 
 export class ChatEntity {
@@ -13,6 +14,10 @@ export class ChatEntity {
 
   get phoneNumber(): string | null | undefined {
     return this.props.phoneNumber;
+  }
+
+  get chatStatus(): ChatStatus {
+    return this.props.chatStatus;
   }
 
   get createdAt(): Date {
