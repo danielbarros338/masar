@@ -9,7 +9,7 @@ import { IBotRepository } from '../ports/i-bot.repository';
 export class CreateBotUseCase {
   constructor(private readonly botRepository: IBotRepository) {}
 
-  async execute(dto: CreateBotDto): Promise<BotResponseDto> {
+  async execute(dto: CreateBotDto, userId: string): Promise<BotResponseDto> {
     const now = new Date();
 
     const bot = new BotEntity({
@@ -19,7 +19,7 @@ export class CreateBotUseCase {
       modelId: dto.modelId,
       language: dto.language,
       phoneNumber: dto.phoneNumber,
-      userId: dto.userId,
+      userId,
       createdAt: now,
       updatedAt: now,
       deletedAt: null,

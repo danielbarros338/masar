@@ -4,6 +4,7 @@ import { GptController } from './api/controllers/gpt.controller';
 import { IAiProvider } from './application/ports/i-ai-provider';
 import { IGptModelRepository } from './application/ports/i-gpt-model.repository';
 import { ChatGptUseCase } from './application/use-cases/chat-gpt.use-case';
+import { ListGptModelsUseCase } from './application/use-cases/list-gpt-models.use-case';
 import { SyncAiModelsUseCase } from './application/use-cases/sync-ai-models.use-case';
 import { GptModelOrmEntity } from './infra/orm-entities/gpt-model.orm-entity';
 import { OpenaiProvider } from './infra/providers/openai.provider';
@@ -14,9 +15,11 @@ import { GptModelRepository } from './infra/repositories/gpt-model.repository';
   controllers: [GptController],
   providers: [
     ChatGptUseCase,
+    ListGptModelsUseCase,
     SyncAiModelsUseCase,
     { provide: IAiProvider, useClass: OpenaiProvider },
     { provide: IGptModelRepository, useClass: GptModelRepository },
   ],
+  exports: [IAiProvider, IGptModelRepository],
 })
 export class GptModule {}

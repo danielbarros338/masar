@@ -1,9 +1,17 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { ITransactionManager } from '../../../../common/ports/i-transaction-manager';
+import { IBotRepository } from '../../../bot/application/ports/i-bot.repository';
+import { IAiProvider } from '../../../gpt/application/ports/i-ai-provider';
+import { IGptModelRepository } from '../../../gpt/application/ports/i-gpt-model.repository';
 import { ChatEntity } from '../../domain/entities/chat.entity';
 import { MessageEntity } from '../../domain/entities/message.entity';
-import { ChatStatus, IncomingMessagePayload } from '../../domain/message.types';
+import {
+  ChatStatus,
+  IncomingMessagePayload,
+  UserType,
+} from '../../domain/message.types';
+import { MessageResponseDto } from '../dto/message-response.dto';
 import { IChatRepository } from '../ports/i-chat.repository';
 import { IMessageRepository } from '../ports/i-message.repository';
 
@@ -14,15 +22,37 @@ export class ProcessIncomingMessageUseCase {
   constructor(
     private readonly chatRepository: IChatRepository,
     private readonly messageRepository: IMessageRepository,
+    private readonly botRepository: IBotRepository,
+    private readonly gptModelRepository: IGptModelRepository,
+    private readonly aiProvider: IAiProvider,
     private readonly transactionManager: ITransactionManager,
   ) {}
 
-  async execute(payload: IncomingMessagePayload): Promise<void> {
+  async execute(payload: IncomingMessagePayload): Promise<MessageResponseDto> {
     this.logger.log(
       `Processando mensagem: botId=${payload.botId} phoneNumber=${payload.phoneNumber}`,
     );
 
-    await this.transactionManager.run(async (manager) => {
+    const bot = await this.botRepository.findById(payload.botId);
+    if (!bot) {
+      throw new NotFoundException(
+        `Bot com id "${payload.botId}" não encontrado`,
+      );
+    }
+
+    const model = await this.gptModelRepository.findById(bot.modelId);
+    if (!model) {
+      throw new NotFoundException(
+        `Modelo GPT com id "${bot.modelId}" não encontrado`,
+      );
+    }
+
+    const botResponse = await this.aiProvider.complete(
+      payload.message,
+      model.modelId,
+    );
+
+    return this.transactionManager.run(async (manager) => {
       const now = new Date();
 
       let chat = await this.chatRepository.findOpenChat(
@@ -46,7 +76,7 @@ export class ProcessIncomingMessageUseCase {
         await this.chatRepository.saveWithManager(chat, manager);
       }
 
-      const message = new MessageEntity({
+      const userMessage = new MessageEntity({
         id: randomUUID(),
         chatId: chat.id,
         message: payload.message,
@@ -56,11 +86,36 @@ export class ProcessIncomingMessageUseCase {
         deletedAt: null,
       });
 
-      await this.messageRepository.saveWithManager(message, manager);
+      await this.messageRepository.saveWithManager(userMessage, manager);
 
       this.logger.log(
-        `Mensagem salva: chatId=${chat.id} messageId=${message.id}`,
+        `Mensagem do usuário salva: chatId=${chat.id} messageId=${userMessage.id}`,
       );
+
+      const responseMessage = new MessageEntity({
+        id: randomUUID(),
+        chatId: chat.id,
+        message: botResponse,
+        userType: UserType.BOT,
+        createdAt: now,
+        updatedAt: now,
+        deletedAt: null,
+      });
+
+      await this.messageRepository.saveWithManager(responseMessage, manager);
+
+      this.logger.log(
+        `Resposta do bot salva: chatId=${chat.id} messageId=${responseMessage.id} modelId=${model.modelId}`,
+      );
+
+      return {
+        id: responseMessage.id,
+        chatId: responseMessage.chatId,
+        message: responseMessage.message,
+        userType: responseMessage.userType,
+        createdAt: responseMessage.createdAt,
+        updatedAt: responseMessage.updatedAt,
+      };
     });
   }
 }

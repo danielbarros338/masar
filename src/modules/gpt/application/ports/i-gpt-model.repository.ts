@@ -1,6 +1,7 @@
 import { GptModelEntity } from '../../domain/entities/gpt-model.entity';
 
 export abstract class IGptModelRepository {
+  abstract findAll(): Promise<GptModelEntity[]>;
   abstract findById(id: string): Promise<GptModelEntity | null>;
   abstract findByModelId(modelId: string): Promise<GptModelEntity | null>;
   abstract findDefault(): Promise<GptModelEntity | null>;

@@ -15,6 +15,11 @@ export class GptModelRepository extends IGptModelRepository {
     super();
   }
 
+  async findAll(): Promise<GptModelEntity[]> {
+    const orms = await this.repo.find({ order: { priority: 'DESC' } });
+    return orms.map((orm) => GptModelMapper.toDomain(orm));
+  }
+
   async findById(id: string): Promise<GptModelEntity | null> {
     const orm = await this.repo.findOneBy({ id });
     return orm ? GptModelMapper.toDomain(orm) : null;
