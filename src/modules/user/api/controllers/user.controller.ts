@@ -6,7 +6,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { JwtUser } from '../../../../common/decorators/current-user.decorator';
 import { CurrentUser } from '../../../../common/decorators/current-user.decorator';
 import { ChangePasswordDto } from '../../application/dto/change-password.dto';
@@ -17,6 +17,8 @@ import { CreateUserUseCase } from '../../application/use-cases/create-user.use-c
 import { ApiChangePassword, ApiCreateUser } from './user.swagger';
 
 @ApiTags('users')
+@ApiBearerAuth()
+@ApiResponse({ status: 401, description: 'Não autenticado' })
 @Controller('users')
 export class UserController {
   constructor(

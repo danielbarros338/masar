@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class ChatAgentDto {
@@ -7,7 +7,7 @@ export class ChatAgentDto {
   @IsNotEmpty({ message: 'O prompt não pode ser vazio' })
   prompt!: string;
 
-  @ApiProperty({ example: 'gpt-4o', required: false })
+  @ApiPropertyOptional({ example: 'gpt-4o' })
   @IsString()
   @IsOptional()
   modelId?: string;

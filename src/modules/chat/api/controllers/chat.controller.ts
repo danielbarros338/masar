@@ -1,12 +1,15 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Public } from '../../../../common/decorators/public.decorator';
 import { ChatResponseDto } from '../../application/dto/chat-response.dto';
 import { CreateChatDto } from '../../application/dto/create-chat.dto';
 import { IncomingMessageDto } from '../../application/dto/incoming-message.dto';
+import { IncomingWhatsappMessageDto } from '../../application/dto/incoming-whatsapp-message.dto';
 import { MessageResponseDto } from '../../application/dto/message-response.dto';
 import { CreateChatUseCase } from '../../application/use-cases/create-chat.use-case';
 import { ProcessIncomingMessageUseCase } from '../../application/use-cases/process-incoming-message.use-case';
-import { ApiCreateChat, ApiReceiveMessage } from './chat.swagger';
+import { ProcessIncomingWhatsappMessageUseCase } from '../../application/use-cases/process-incoming-whatsapp-message.use-case';
+import { ApiCreateChat, ApiReceiveMessage, ApiReceiveWhatsappMessage } from './chat.swagger';
 
 @ApiTags('chats')
 @ApiBearerAuth()
@@ -16,6 +19,7 @@ export class ChatController {
   constructor(
     private readonly createChat: CreateChatUseCase,
     private readonly processIncomingMessage: ProcessIncomingMessageUseCase,
+    private readonly processIncomingWhatsappMessage: ProcessIncomingWhatsappMessageUseCase,
   ) {}
 
   @Post()
@@ -35,5 +39,13 @@ export class ChatController {
       message: dto.message,
       userType: dto.userType,
     });
+  }
+
+  @Post('incoming-whatsapp-message')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @ApiReceiveWhatsappMessage()
+  receiveWhatsappMessage(@Body() dto: IncomingWhatsappMessageDto): Promise<void> {
+    return this.processIncomingWhatsappMessage.execute(dto);
   }
 }

@@ -6,7 +6,7 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ChatAgentResponseDto } from '../../application/dto/chat-agent-response.dto';
 import { ChatAgentDto } from '../../application/dto/chat-agent.dto';
 import { GptModelResponseDto } from '../../application/dto/gpt-model-response.dto';
@@ -14,10 +14,11 @@ import { SyncAiModelsResponseDto } from '../../application/dto/sync-ai-models-re
 import { ChatAgentUseCase } from '../../application/use-cases/chat-agent.use-case';
 import { ListAgentModelsUseCase } from '../../application/use-cases/list-agent-models.use-case';
 import { SyncAiModelsUseCase } from '../../application/use-cases/sync-ai-models.use-case';
-import { ApiListAgentModels, ApiSyncAiModels } from './agent.swagger';
+import { ApiChatAgent, ApiListAgentModels, ApiSyncAiModels } from './agent.swagger';
 
 @ApiTags('agent')
 @ApiBearerAuth()
+@ApiResponse({ status: 401, description: 'Não autenticado' })
 @Controller('agent')
 export class AgentController {
   constructor(
@@ -28,6 +29,7 @@ export class AgentController {
 
   @Post('chat')
   @HttpCode(HttpStatus.OK)
+  @ApiChatAgent()
   chat(@Body() dto: ChatAgentDto): Promise<ChatAgentResponseDto> {
     return this.chatAgent.execute(dto);
   }

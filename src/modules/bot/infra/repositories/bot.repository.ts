@@ -35,6 +35,11 @@ export class BotRepository extends IBotRepository {
     await this.repo.save(orm);
   }
 
+  async findByPhoneNumber(phoneNumber: string): Promise<BotEntity | null> {
+    const orm = await this.repo.findOneBy({ phoneNumber });
+    return orm ? BotMapper.toDomain(orm) : null;
+  }
+
   async delete(id: string): Promise<void> {
     await this.repo.softDelete(id);
   }

@@ -22,3 +22,12 @@ export const ApiReceiveMessage = () =>
       description: 'Bot ou modelo GPT não encontrado',
     }),
   );
+
+export const ApiReceiveWhatsappMessage = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: 'Webhook Infobip — processa mensagem WhatsApp recebida',
+    }),
+    ApiResponse({ status: 200, description: 'Mensagem processada com sucesso' }),
+    ApiResponse({ status: 400, description: 'Dados inválidos' }),
+  );

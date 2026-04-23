@@ -9,7 +9,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../../../../common/decorators/current-user.decorator';
 import type { JwtUser } from '../../../../common/types/jwt.types';
 import { BotResponseDto } from '../../application/dto/bot-response.dto';
@@ -23,6 +23,7 @@ import { ApiCreateBot, ApiDeleteBot, ApiListUserBots, ApiUpdateBot } from './bot
 
 @ApiTags('bots')
 @ApiBearerAuth()
+@ApiResponse({ status: 401, description: 'Não autenticado' })
 @Controller('bots')
 export class BotController {
   constructor(
