@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { BotModule } from './modules/bot/bot.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { EmailModule } from './modules/email/email.module';
+import { KnowledgeModule } from './modules/knowledge/knowledge.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -23,6 +24,7 @@ import { UserModule } from './modules/user/user.module';
     BotModule,
     AgentModule,
     ChatModule,
+    KnowledgeModule,
   ],
   controllers: [],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],

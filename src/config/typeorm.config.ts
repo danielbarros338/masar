@@ -5,6 +5,7 @@ import { RefreshTokenOrmEntity } from '../modules/auth/infra/orm-entities/refres
 import { BotOrmEntity } from '../modules/bot/infra/orm-entities/bot.orm-entity';
 import { ChatOrmEntity } from '../modules/chat/infra/orm-entities/chat.orm-entity';
 import { MessageOrmEntity } from '../modules/chat/infra/orm-entities/message.orm-entity';
+import { KnowledgeOrmEntity } from '../modules/knowledge/infra/orm-entities/knowledge.orm-entity';
 import { UserPasswordOrmEntity } from '../modules/user/infra/orm-entities/user-password.orm-entity';
 import { UserOrmEntity } from '../modules/user/infra/orm-entities/user.orm-entity';
 
@@ -18,6 +19,7 @@ const entities = [
   BotOrmEntity,
   ChatOrmEntity,
   MessageOrmEntity,
+  KnowledgeOrmEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {

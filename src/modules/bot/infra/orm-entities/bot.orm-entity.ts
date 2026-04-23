@@ -1,10 +1,10 @@
 import {
-    Column,
-    CreateDateColumn,
-    DeleteDateColumn,
-    Entity,
-    PrimaryColumn,
-    UpdateDateColumn,
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('bots')
