@@ -21,6 +21,11 @@ export class CreateBotDto {
   @IsNotEmpty({ message: 'O idioma não pode ser vazio' })
   language!: string;
 
+  @ApiProperty({ example: 'Você é um assistente prestativo e amigável.' })
+  @IsString()
+  @IsNotEmpty({ message: 'A persona não pode ser vazia' })
+  persona!: string;
+
   @ApiProperty({ example: '+5511999999999' })
   @IsString()
   @IsNotEmpty({ message: 'O número de telefone não pode ser vazio' })

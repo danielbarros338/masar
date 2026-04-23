@@ -9,6 +9,7 @@ export class BotMapper {
       type: orm.type,
       modelId: orm.modelId,
       language: orm.language,
+      persona: orm.persona,
       phoneNumber: orm.phoneNumber,
       userId: orm.userId,
       createdAt: orm.createdAt,
@@ -24,6 +25,7 @@ export class BotMapper {
     orm.type = entity.type;
     orm.modelId = entity.modelId;
     orm.language = entity.language;
+    orm.persona = entity.persona;
     orm.phoneNumber = entity.phoneNumber;
     orm.userId = entity.userId;
     orm.createdAt = entity.createdAt;

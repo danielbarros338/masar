@@ -19,7 +19,6 @@ const entities = [
   ChatOrmEntity,
   MessageOrmEntity,
 ];
-const migrations = [];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'mysql',
@@ -29,7 +28,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   entities,
-  migrations,
   migrationsRun: process.env.DB_MIGRATIONS_RUN === 'true',
   synchronize: process.env.DB_SYNCHRONIZE === 'true',
 };

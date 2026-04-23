@@ -4,6 +4,7 @@ export type BotProps = {
   type: string;
   modelId: string;
   language: string;
+  persona: string;
   phoneNumber: string;
   userId: string;
   createdAt: Date;

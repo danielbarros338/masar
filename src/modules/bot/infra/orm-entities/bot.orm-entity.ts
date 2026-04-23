@@ -1,10 +1,10 @@
 import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  PrimaryColumn,
-  UpdateDateColumn,
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    PrimaryColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('bots')
@@ -23,6 +23,9 @@ export class BotOrmEntity {
 
   @Column({ type: 'varchar', length: 20 })
   language!: string;
+
+  @Column({ type: 'text' })
+  persona!: string;
 
   @Column({ type: 'varchar', length: 20, name: 'phone_number' })
   phoneNumber!: string;

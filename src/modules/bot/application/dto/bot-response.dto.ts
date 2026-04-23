@@ -16,6 +16,9 @@ export class BotResponseDto {
   @ApiProperty({ example: 'pt-BR' })
   language!: string;
 
+  @ApiProperty({ example: 'Você é um assistente prestativo e amigável.' })
+  persona!: string;
+
   @ApiProperty({ example: '+5511999999999' })
   phoneNumber!: string;
 

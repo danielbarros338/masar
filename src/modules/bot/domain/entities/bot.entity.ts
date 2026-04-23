@@ -23,6 +23,10 @@ export class BotEntity {
     return this.props.language;
   }
 
+  get persona(): string {
+    return this.props.persona;
+  }
+
   get phoneNumber(): string {
     return this.props.phoneNumber;
   }
