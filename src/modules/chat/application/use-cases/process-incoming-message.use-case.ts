@@ -4,12 +4,13 @@ import { ITransactionManager } from '../../../../common/ports/i-transaction-mana
 import { IAiProvider } from '../../../agent/application/ports/i-ai-provider';
 import { IGptModelRepository } from '../../../agent/application/ports/i-gpt-model.repository';
 import { IBotRepository } from '../../../bot/application/ports/i-bot.repository';
+import { IKnowledgeRepository } from '../../../knowledge/application/ports/i-knowledge.repository';
 import { ChatEntity } from '../../domain/entities/chat.entity';
 import { MessageEntity } from '../../domain/entities/message.entity';
 import {
-  ChatStatus,
-  IncomingMessagePayload,
-  UserType,
+    ChatStatus,
+    IncomingMessagePayload,
+    UserType,
 } from '../../domain/message.types';
 import { MessageResponseDto } from '../dto/message-response.dto';
 import { IChatRepository } from '../ports/i-chat.repository';
@@ -26,6 +27,7 @@ export class ProcessIncomingMessageUseCase {
     private readonly gptModelRepository: IGptModelRepository,
     private readonly aiProvider: IAiProvider,
     private readonly transactionManager: ITransactionManager,
+    private readonly knowledgeRepository: IKnowledgeRepository,
   ) {}
 
   async execute(payload: IncomingMessagePayload): Promise<MessageResponseDto> {
@@ -47,9 +49,20 @@ export class ProcessIncomingMessageUseCase {
       );
     }
 
+    const knowledges = await this.knowledgeRepository.findByBotId(
+      payload.botId,
+    );
+
+    const systemPrompt = this.buildSystemPrompt(
+      bot.persona,
+      bot.language,
+      knowledges.map((k) => k.behaviour),
+    );
+
     const botResponse = await this.aiProvider.complete(
       payload.message,
       model.modelId,
+      systemPrompt,
     );
 
     return this.transactionManager.run(async (manager) => {
@@ -117,5 +130,24 @@ export class ProcessIncomingMessageUseCase {
         updatedAt: responseMessage.updatedAt,
       };
     });
+  }
+
+  private buildSystemPrompt(
+    persona: string,
+    language: string,
+    behaviours: string[],
+  ): string {
+    const parts: string[] = [`Persona:\n${persona}`];
+
+    if (behaviours.length > 0) {
+      const knowledgeSection = behaviours
+        .map((b) => `- ${b}`)
+        .join('\n');
+      parts.push(`Base de conhecimento:\n${knowledgeSection}`);
+    }
+
+    parts.push(`Responda sempre em: ${language}`);
+
+    return parts.join('\n\n');
   }
 }

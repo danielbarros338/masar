@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from '../../common/common.module';
 import { AgentModule } from '../agent/agent.module';
 import { BotModule } from '../bot/bot.module';
+import { KnowledgeModule } from '../knowledge/knowledge.module';
 import { ChatController } from './api/controllers/chat.controller';
 import { IChatRepository } from './application/ports/i-chat.repository';
 import { IMessagePublisher } from './application/ports/i-message-publisher';
@@ -24,6 +25,7 @@ import { MessageRepository } from './infra/repositories/message.repository';
     CommonModule,
     BotModule,
     AgentModule,
+    KnowledgeModule,
   ],
   controllers: [ChatController],
   providers: [

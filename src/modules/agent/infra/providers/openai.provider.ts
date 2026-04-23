@@ -15,10 +15,22 @@ export class OpenaiProvider extends IAiProvider {
     });
   }
 
-  async complete(prompt: string, modelId: string): Promise<string> {
+  async complete(
+    prompt: string,
+    modelId: string,
+    systemPrompt?: string,
+  ): Promise<string> {
+    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [];
+
+    if (systemPrompt) {
+      messages.push({ role: 'system', content: systemPrompt });
+    }
+
+    messages.push({ role: 'user', content: prompt });
+
     const completion = await this.client.chat.completions.create({
       model: modelId,
-      messages: [{ role: 'user', content: prompt }],
+      messages,
     });
 
     return completion.choices[0]?.message?.content ?? '';

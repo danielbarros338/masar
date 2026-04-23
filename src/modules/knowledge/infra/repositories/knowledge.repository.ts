@@ -20,6 +20,11 @@ export class KnowledgeRepository extends IKnowledgeRepository {
     return orm ? KnowledgeMapper.toDomain(orm) : null;
   }
 
+  async findByBotId(botId: string): Promise<KnowledgeEntity[]> {
+    const orms = await this.repo.findBy({ botId });
+    return orms.map(KnowledgeMapper.toDomain);
+  }
+
   async save(entity: KnowledgeEntity): Promise<void> {
     const orm = KnowledgeMapper.toPersistence(entity);
     await this.repo.save(orm);
