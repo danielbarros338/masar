@@ -20,8 +20,23 @@ export class BotRepository extends IBotRepository {
     return orm ? BotMapper.toDomain(orm) : null;
   }
 
+  async findAllByUserId(userId: string): Promise<BotEntity[]> {
+    const orms = await this.repo.findBy({ userId });
+    return orms.map(BotMapper.toDomain);
+  }
+
+  async findByIdAndUserId(id: string, userId: string): Promise<BotEntity | null> {
+    const orm = await this.repo.findOneBy({ id, userId });
+    return orm ? BotMapper.toDomain(orm) : null;
+  }
+
   async save(entity: BotEntity): Promise<void> {
     const orm = BotMapper.toPersistence(entity);
     await this.repo.save(orm);
   }
+
+  async delete(id: string): Promise<void> {
+    await this.repo.softDelete(id);
+  }
 }
+

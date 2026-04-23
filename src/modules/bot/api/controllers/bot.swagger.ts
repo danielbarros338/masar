@@ -9,3 +9,28 @@ export const ApiCreateBot = () =>
     ApiResponse({ status: 400, description: 'Dados inválidos' }),
     ApiResponse({ status: 401, description: 'Não autenticado' }),
   );
+
+export const ApiListUserBots = () =>
+  applyDecorators(
+    ApiOperation({ summary: 'Lista todos os bots do usuário autenticado' }),
+    ApiResponse({ status: 200, type: [BotResponseDto] }),
+    ApiResponse({ status: 401, description: 'Não autenticado' }),
+  );
+
+export const ApiUpdateBot = () =>
+  applyDecorators(
+    ApiOperation({ summary: 'Atualiza um bot do usuário autenticado' }),
+    ApiResponse({ status: 200, type: BotResponseDto }),
+    ApiResponse({ status: 400, description: 'Dados inválidos' }),
+    ApiResponse({ status: 401, description: 'Não autenticado' }),
+    ApiResponse({ status: 404, description: 'Bot não encontrado' }),
+  );
+
+export const ApiDeleteBot = () =>
+  applyDecorators(
+    ApiOperation({ summary: 'Remove um bot do usuário autenticado' }),
+    ApiResponse({ status: 204 }),
+    ApiResponse({ status: 401, description: 'Não autenticado' }),
+    ApiResponse({ status: 404, description: 'Bot não encontrado' }),
+  );
+

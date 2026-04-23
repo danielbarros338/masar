@@ -1,98 +1,162 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+﻿# Masar
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Plataforma de chatbots com IA para gerenciamento de múltiplos bots, base de conhecimento e integração com modelos GPT da OpenAI.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Construído com **NestJS**, seguindo **Clean Architecture**, **DDD** e princípios **SOLID**.
 
-## Description
+## Stack
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+| Camada | Tecnologia |
+|---|---|
+| Framework | NestJS 11 + TypeScript 5 |
+| Banco de dados | MySQL + TypeORM 0.3 |
+| Cache | Redis (ioredis) |
+| Fila de mensagens | RabbitMQ (amqplib) |
+| IA | OpenAI SDK (GPT) |
+| Autenticação | JWT + Passport + PBKDF2 |
+| E-mail | Nodemailer |
+| Documentação | Swagger / OpenAPI |
+| Testes | Jest + Supertest |
 
-## Project setup
+## Módulos
 
-```bash
-$ yarn install
+| Módulo | Responsabilidade |
+|---|---|
+| `auth` | Login, registro, refresh token e confirmação de e-mail |
+| `user` | Criação de conta e alteração de senha |
+| `bot` | Criação e gerenciamento de chatbots por usuário |
+| `chat` | Sessões de chat e processamento assíncrono de mensagens via RabbitMQ |
+| `agent` | Integração com OpenAI: listagem e sincronização de modelos GPT |
+| `knowledge` | Base de conhecimento vinculada a cada bot |
+| `email` | Envio de e-mails transacionais via Nodemailer |
+
+## Arquitetura
+
+```
+src/
+├── modules/<modulo>/
+│   ├── api/controllers/      # Controllers HTTP (NestJS)
+│   ├── application/
+│   │   ├── use-cases/        # Casos de uso (orquestração)
+│   │   ├── dto/              # DTOs de entrada e saída
+│   │   └── ports/            # Interfaces/contratos (ex: IUserRepository)
+│   ├── domain/
+│   │   ├── entities/         # Entidades de domínio
+│   │   ├── props/            # Tipos de propriedades
+│   │   └── value-objects/    # Value Objects imutáveis
+│   └── infra/
+│       ├── orm-entities/     # Entidades TypeORM
+│       ├── repositories/     # Implementações dos ports
+│       └── mapper/           # Conversão domain ↔ ORM
+└── common/                   # Guards, utils, ports e types compartilhados
 ```
 
-## Compile and run the project
+**Regra de dependência:** `api → application → domain`. A camada `infra` implementa ports definidos em `application`.
 
-```bash
-# development
-$ yarn run start
+## Endpoints da API
 
-# watch mode
-$ yarn run start:dev
+A documentação interativa está disponível em `http://localhost:3000/api/docs` após iniciar o servidor.
 
-# production mode
-$ yarn run start:prod
+### Rotas públicas
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `POST` | `/auth/login` | Autenticação com e-mail e senha |
+| `POST` | `/auth/register` | Cadastro de novo usuário |
+| `POST` | `/auth/refresh` | Renovação do access token |
+| `POST` | `/auth/confirm-email` | Confirmação de e-mail |
+
+### Rotas protegidas (requer JWT)
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `PATCH` | `/users/password` | Alteração de senha |
+| `POST` | `/bots` | Criar bot |
+| `GET` | `/bots` | Listar bots do usuário |
+| `PATCH` | `/bots/:id` | Atualizar bot |
+| `DELETE` | `/bots/:id` | Remover bot |
+| `POST` | `/chats` | Iniciar sessão de chat |
+| `POST` | `/chats/incoming-message` | Enviar mensagem |
+| `POST` | `/agent/chat` | Chat direto com agente IA |
+| `GET` | `/agent/models` | Listar modelos GPT disponíveis |
+| `POST` | `/agent/sync-models` | Sincronizar modelos com a OpenAI |
+| `POST` | `/knowledge/create-knowledge` | Criar entrada na base de conhecimento |
+| `PATCH` | `/knowledge/update-knowledge/:id` | Atualizar conhecimento |
+| `DELETE` | `/knowledge/delete-knowledge/:id` | Remover conhecimento |
+| `GET` | `/knowledge/get-knowledge/:id` | Buscar conhecimento |
+
+## Configuração
+
+### Variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+
+```env
+# Servidor
+PORT=3000
+
+# Banco de dados (MySQL)
+DB_HOST=
+DB_PORT=3306
+DB_USER=
+DB_PASSWORD=
+DB_DATABASE=
+DB_SYNCHRONIZE=false
+DB_MIGRATIONS_RUN=true
+
+# JWT
+JWT_SECRET=
+JWT_EXPIRES_IN=15m
+
+# Redis
+REDIS_HOST=
+REDIS_PORT=6379
+
+# RabbitMQ
+RABBITMQ_URL=
+
+# OpenAI
+OPENAI_API_KEY=
+
+# E-mail (SMTP)
+SMTP_HOST=
+SMTP_PORT=
+SMTP_USER=
+SMTP_PASS=
 ```
 
-## Run tests
+### Instalação
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+yarn install
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Execução
 
 ```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+# Desenvolvimento com watch
+yarn start:dev
+
+# Produção
+yarn build
+yarn start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Testes
 
-## Resources
+```bash
+# Testes unitários
+yarn test
 
-Check out a few resources that may come in handy when working with NestJS:
+# Cobertura de testes
+yarn test:cov
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# Testes e2e
+yarn test:e2e
+```
 
-## Support
+## Lint
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```bash
+yarn lint
+```

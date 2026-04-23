@@ -1,7 +1,7 @@
 import { BotProps } from '../props/bot.props';
 
 export class BotEntity {
-  constructor(private readonly props: BotProps) {}
+  constructor(private props: BotProps) {}
 
   get id(): string {
     return this.props.id;
@@ -45,5 +45,9 @@ export class BotEntity {
 
   get deletedAt(): Date | null | undefined {
     return this.props.deletedAt;
+  }
+
+  update(data: Partial<Omit<BotProps, 'id' | 'userId' | 'createdAt'>>): void {
+    this.props = { ...this.props, ...data, updatedAt: new Date() };
   }
 }
